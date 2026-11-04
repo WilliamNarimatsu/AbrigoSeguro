@@ -12,7 +12,11 @@ public class AlertaActivity extends BaseActivity {
         String id = getIntent().getStringExtra("alert_id"); if (id == null) id = "chuva";
         DemoData.Alert selected = null; for (DemoData.Alert a : store.alerts()) if (a.id.equals(id)) selected = a;
         screen("Detalhes do alerta", "", true);
-        if (selected == null) { card("Alerta não encontrado", "Volte à central e selecione um exemplo."); return; }
+        if (selected == null) {
+            card("Alerta não encontrado", "Volte à central e selecione um exemplo.");
+            button(body, "Abrir central de alertas", true, () -> navigate(CentralAlertasActivity.class));
+            return;
+        }
         final DemoData.Alert a = selected;
         store.setFlag("read_" + a.id, true);
         LinearLayout hero = card(a.level.toUpperCase(java.util.Locale.ROOT) + " • SIMULAÇÃO", "");

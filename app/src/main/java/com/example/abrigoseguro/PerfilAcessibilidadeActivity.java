@@ -36,7 +36,7 @@ public class PerfilAcessibilidadeActivity extends BaseActivity {
         button(body, "Minha rede de apoio", false, () -> navigate(MinhaRedeApoioActivity.class));
         button(body, "Gerenciar pacote offline", false, () -> navigate(ModoOfflineActivity.class));
         button(body, "Rever apresentação inicial", false, () -> navigate(OnbordingActivity.class));
-        button(body, "Sobre o aplicativo", false, () -> new AlertDialog.Builder(this).setTitle("Abrigo Seguro • 1.2")
+        button(body, "Sobre o aplicativo", false, () -> new AlertDialog.Builder(this).setTitle("Abrigo Seguro • 1.2.1")
             .setMessage("Projeto acadêmico em Android nativo. Design baseado no Figma Abrigo Seguro — Premium UI Final. Abrigos, alertas e rotas são fictícios. Não há monitoramento, reservas ou serviço de resgate integrado.\n\nAutoria original: equipe Abrigo Seguro / WilliamNarimatsu.")
             .setPositiveButton("Fechar", null).show());
         button(body, "Apagar meus dados locais", false, () -> confirm("Apagar todos os dados locais?", "Contatos, rascunhos, favoritos, perfil, checklist e pacote offline serão apagados deste aplicativo.", () -> {

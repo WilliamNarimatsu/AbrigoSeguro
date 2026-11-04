@@ -34,6 +34,7 @@ Em **Actions → Android — build, tests and APK**, abra uma execução conclu�
 
 ## Funcionalidades
 
+- Ícone próprio do aplicativo, adaptativo e com suporte a ícones temáticos; compatível com Android 7 ou superior.
 - Onboarding apenas na primeira abertura; início com troca de cenário (seguro, atenção e crítico).
 - Abrigos: busca tolerante a acentos, filtros combináveis de vagas/acessibilidade/pets/favoritos, detalhes e ocupação.
 - Mapa ilustrativo do Figma, seleção do destino e diagrama de trajeto por abrigo.

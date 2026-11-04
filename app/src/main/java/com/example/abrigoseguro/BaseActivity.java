@@ -176,7 +176,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         layout.setMargins(dp(14), dp(8), dp(14), dp(10)); root.addView(bottomBar, layout);
     }
     static int navigationIndex(Class<?> page) {
-        if (page == HomeActivity.class || page == AtencaoActivity.class || page == AlertaActivity.class) return 0;
+        if (page == HomeActivity.class || page == AtencaoActivity.class || page == AlertaActivity.class || page == CentralAlertasActivity.class) return 0;
         if (page == MapaRiscoActivity.class) return 1;
         if (page == AbrigosProximosActivity.class || page == DetalhesAbrigoActivity.class) return 2;
         if (page == ModoEmergenciaActivity.class) return 3;
