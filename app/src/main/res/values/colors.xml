@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="critical_red">#FF3B30</color>
+    <color name="accent_yellow">#FFC107</color>
+    <color name="fundo_azul">#083244</color>
+
+    <!-- Cores do Design System -->
+    <color name="navy">#06111F</color>
+    <color name="surface">#0E2035</color>
+    <color name="surface_raised">#122842</color>
+    <color name="electric">#1E88FF</color>
+    <color name="cyan">#23D7FF</color>
+    <color name="safe">#25D07B</color>
+    <color name="attention">#FFB020</color>
+    <color name="critical">#FF3B4E</color>
+    <color name="text_main">#F5FAFF</color>
+    <color name="muted">#8EA7C1</color>
+</resources>
