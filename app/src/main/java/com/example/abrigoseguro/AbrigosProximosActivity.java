@@ -1,103 +1,41 @@
 package com.example.abrigoseguro;
-
 import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.Toast;
+import android.net.Uri;
+import android.text.InputType;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import androidx.appcompat.app.AlertDialog;
+import java.util.List;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-public class AbrigosProximosActivity extends AppCompatActivity {
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_abrigos_proximos);
-
-        // 1. Botão de voltar (seta do topo) vai para o MapaRiscoActivity
-        ImageView ivHeaderIcon = findViewById(R.id.ivBack);
-        if (ivHeaderIcon != null) {
-            ivHeaderIcon.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(AbrigosProximosActivity.this, MapaRiscoActivity.class);
-                    startActivity(intent);
-                }
-            });
+public class AbrigosProximosActivity extends BaseActivity {
+    private LinearLayout results;
+    @Override protected void render() {
+        screen("Abrigos próximos", "Catálogo fictício • distâncias geográficas não são calculadas.", true);
+        input(body, "Buscar nome ou bairro", store.text("shelter_query"), InputType.TYPE_CLASS_TEXT, value -> { store.setText("shelter_query", value); renderResults(); });
+        com.google.android.material.chip.ChipGroup chips = new com.google.android.material.chip.ChipGroup(this);
+        body.addView(chips);
+        String[] labels = {"Com vagas", "Acessível", "Aceita pets", "Favoritos"};
+        String[] keys = {"vacancies", "accessible", "pets", "favorites_only"};
+        for (int i = 0; i < labels.length; i++) {
+            String key = keys[i]; com.google.android.material.chip.Chip chip = new com.google.android.material.chip.Chip(this);
+            chip.setText(labels[i]); chip.setCheckable(true); chip.setChecked(store.flag(key)); chip.setEnsureMinTouchTargetSize(true);
+            chip.setOnCheckedChangeListener((b, on) -> { store.setFlag(key, on); renderResults(); }); chips.addView(chip);
         }
-
-        // 2. Botão "Avançar" vai para a tela DetalhesAbrigoActivity
-        Button btnAvancar = findViewById(R.id.btnAvancar);
-        if (btnAvancar != null) {
-            btnAvancar.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(AbrigosProximosActivity.this, DetalhesAbrigoActivity.class);
-                    startActivity(intent);
-                }
-            });
+        button(body, "Limpar filtros", false, () -> { for (String key : keys) store.setFlag(key, false); store.setText("shelter_query", ""); render(); });
+        results = column(); body.addView(results); renderResults();
+    }
+    private void renderResults() {
+        if (results == null) return; results.removeAllViews();
+        List<DemoData.Shelter> all = DemoData.filter(store.shelters(), store.text("shelter_query"), store.flag("accessible"), store.flag("pets"), store.flag("vacancies"), store.flag("favorites_only"), store.favorites());
+        label(results, all.size() + " abrigos encontrados", 13, muted(), false);
+        LinearLayout page = body; body = results;
+        if (all.isEmpty()) card("Nenhum abrigo encontrado", "Tente outro nome ou limpe os filtros acima.");
+        for (DemoData.Shelter s : all) {
+            LinearLayout box = card((store.favorites().contains(s.id) ? "★ " : "") + s.name, s.available() + " de " + s.capacity + " vagas livres • simulação");
+            tintCard(box, panel(), s.available() > 0 ? 0xff265b78 : 0xffa36b21);
+            label(box, s.services(), 13, s.accessible ? GREEN : muted(), false);
+            button(box, "Ver detalhes de " + s.name, false, () -> shelter(s.id));
         }
-
-        // 3. Barra de Navegação Inferior (Botões Invisíveis)
-
-        // Botão Início -> Vai para a HomeActivity
-        View navInicio = findViewById(R.id.navInicio);
-        if (navInicio != null) {
-            navInicio.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(AbrigosProximosActivity.this, HomeActivity.class);
-                    startActivity(intent);
-                }
-            });
-        }
-
-        // Botão Mapa -> Vai para a tela de Mapa de Risco
-        View navMapa = findViewById(R.id.navMapa);
-        if (navMapa != null) {
-            navMapa.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(AbrigosProximosActivity.this, MapaRiscoActivity.class);
-                    startActivity(intent);
-                }
-            });
-        }
-
-        // Botão Abrigos -> Já estás na tela de Abrigos Próximos
-        View navAbrigos = findViewById(R.id.navAbrigos);
-        if (navAbrigos != null) {
-            navAbrigos.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(AbrigosProximosActivity.this, "Já está em Abrigos", Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
-
-        // Botão SOS -> Vai para a tela de Modo Emergência
-        View navSos = findViewById(R.id.navSos);
-        if (navSos != null) {
-            navSos.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(AbrigosProximosActivity.this, ModoEmergenciaActivity.class);
-                    startActivity(intent);
-                }
-            });
-        }
-
-        // Botão Mais -> Vai para a tela de Perfil e Acessibilidade
-        View navMais = findViewById(R.id.navMais);
-        if (navMais != null) {
-            navMais.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(AbrigosProximosActivity.this, PerfilAcessibilidadeActivity.class);
-                    startActivity(intent);
-                }
-            });
-        }
+        body = page;
     }
 }

@@ -1,27 +1,16 @@
 package com.example.abrigoseguro;
-
 import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import androidx.appcompat.app.AppCompatActivity;
+import android.net.Uri;
+import android.text.InputType;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import androidx.appcompat.app.AlertDialog;
+import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.onbording);
-
-        Button btnComecar = findViewById(R.id.btnComecar);
-
-        btnComecar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Passa o contexto atual (this) e a classe de destino correta
-                Intent intent = new Intent(MainActivity.this, HomeActivity.class);
-                startActivity(intent);
-            }
-        });
+/** Launcher routes returning users directly to Home. */
+public class MainActivity extends BaseActivity {
+    @Override protected void render() {
+        navigate(store.flag("onboarded") ? HomeActivity.class : OnbordingActivity.class);
+        finish();
     }
 }

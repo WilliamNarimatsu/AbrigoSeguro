@@ -1,29 +1,23 @@
 package com.example.abrigoseguro;
-
 import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
+import android.net.Uri;
+import android.text.InputType;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import androidx.appcompat.app.AlertDialog;
+import java.util.List;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-public class OnbordingActivity extends AppCompatActivity {
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.onbording);
-
-        // Configuração do botão "Começar" para iniciar o fluxo a partir do zero
-        Button btnComecar = findViewById(R.id.btnComecar);
-        if (btnComecar != null) {
-            btnComecar.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // Direciona para a primeira tela do aplicativo (AbrigosProximosActivity)
-                    Intent intent = new Intent(OnbordingActivity.this, HomeActivity.class);
-                    startActivity(intent);
-                }
-            });
-        }
+public class OnbordingActivity extends BaseActivity {
+    @Override protected void render() {
+        screen("", "", false);
+        illustration(body, R.drawable.ic_logo_abrigo, "Símbolo do Abrigo Seguro", 130);
+        TextView title = label(body, "Abrigo\nSeguro", 36, TEXT, true);
+        title.setGravity(android.view.Gravity.CENTER);
+        illustration(body, R.drawable.img_banner_chuva, "Ilustração de chuva", 180);
+        label(body, "Cidades mais seguras.\nPessoas mais protegidas.", 20, TEXT, true);
+        label(body, "Explore abrigos, organize sua rede de apoio e prepare-se com informação acessível.", 15, muted(), false);
+        LinearLayout note = card("Uma experiência acadêmica", "Abrigos, vagas, alertas e trajetos são fictícios. O app não monitora sua região nem aciona resgate.");
+        tintCard(note, 0xff0c2638, 0xff244764);
+        button(body, "Começar →", true, () -> { store.setFlag("onboarded", true); navigate(HomeActivity.class); finish(); });
     }
 }

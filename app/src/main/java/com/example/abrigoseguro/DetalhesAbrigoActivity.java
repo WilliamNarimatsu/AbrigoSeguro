@@ -1,103 +1,26 @@
 package com.example.abrigoseguro;
-
 import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
+import android.net.Uri;
+import android.text.InputType;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import androidx.appcompat.app.AlertDialog;
+import java.util.List;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-public class DetalhesAbrigoActivity extends AppCompatActivity {
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detalhes_abrigo);
-
-        // 1. Botão de voltar (ivBack) volta para a lista de abrigos próximos
-        ImageView ivBack = findViewById(R.id.ivBack);
-        if (ivBack != null) {
-            ivBack.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(DetalhesAbrigoActivity.this, AbrigosProximosActivity.class);
-                    startActivity(intent);
-                }
-            });
-        }
-
-        // 2. Botão de traçar rota (btnTracarRota) avança para a tela de modo de emergência
-        Button btnTracarRota = findViewById(R.id.btnTracarRota);
-        if (btnTracarRota != null) {
-            btnTracarRota.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(DetalhesAbrigoActivity.this, ModoEmergenciaActivity.class);
-                    startActivity(intent);
-                }
-            });
-        }
-
-        // 3. Barra de Navegação Inferior (Botões Invisíveis)
-
-        // Botão Início -> Vai para a HomeActivity
-        View navInicio = findViewById(R.id.navInicio);
-        if (navInicio != null) {
-            navInicio.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(DetalhesAbrigoActivity.this, HomeActivity.class);
-                    startActivity(intent);
-                }
-            });
-        }
-
-        // Botão Mapa -> Vai para a tela de Mapa de Risco
-        View navMapa = findViewById(R.id.navMapa);
-        if (navMapa != null) {
-            navMapa.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(DetalhesAbrigoActivity.this, MapaRiscoActivity.class);
-                    startActivity(intent);
-                }
-            });
-        }
-
-        // Botão Abrigos -> Vai para a tela de Abrigos Próximos
-        View navAbrigos = findViewById(R.id.navAbrigos);
-        if (navAbrigos != null) {
-            navAbrigos.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(DetalhesAbrigoActivity.this, AbrigosProximosActivity.class);
-                    startActivity(intent);
-                }
-            });
-        }
-
-        // Botão SOS -> Vai para a tela de Modo Emergência
-        View navSos = findViewById(R.id.navSos);
-        if (navSos != null) {
-            navSos.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(DetalhesAbrigoActivity.this, ModoEmergenciaActivity.class);
-                    startActivity(intent);
-                }
-            });
-        }
-
-        // Botão Mais -> Vai para a tela de Perfil e Acessibilidade
-        View navMais = findViewById(R.id.navMais);
-        if (navMais != null) {
-            navMais.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(DetalhesAbrigoActivity.this, PerfilAcessibilidadeActivity.class);
-                    startActivity(intent);
-                }
-            });
-        }
+public class DetalhesAbrigoActivity extends BaseActivity {
+    @Override protected void render() {
+        screen("Detalhes do abrigo", "", true);
+        DemoData.Shelter s = DemoData.findShelter(store.shelters(), getIntent().getStringExtra("shelter_id"));
+        if (s == null) { card("Abrigo não encontrado", "Volte ao catálogo e selecione um abrigo."); button(body, "Abrir catálogo", true, () -> navigate(AbrigosProximosActivity.class)); return; }
+        illustration(body, R.drawable.bg_mapa, "Ilustração de edifícios do cenário, sem distância real", 180);
+        label(body, s.name, 24, TEXT, true); label(body, s.address, 14, muted(), false);
+        LinearLayout capacity = card(s.available() + " vagas livres", "Capacidade: " + s.capacity + " • Ocupação: " + s.occupied + " (exemplo)");
+        android.widget.ProgressBar progress = new android.widget.ProgressBar(this, null, android.R.attr.progressBarStyleHorizontal);
+        progress.setMax(s.capacity); progress.setProgress(s.occupied); progress.setContentDescription(s.occupied + " de " + s.capacity + " vagas ocupadas"); capacity.addView(progress);
+        card("Estrutura disponível", s.services());
+        card("Status demonstrativo", s.available() > 0 ? "Vagas no cenário. Nenhuma reserva é realizada pelo aplicativo." : "Lotado no cenário. Consulte outro abrigo no catálogo.");
+        button(body, store.favorites().contains(s.id) ? "★ Remover dos favoritos" : "☆ Salvar nos favoritos", false, () -> { store.toggleFavorite(s.id); render(); });
+        button(body, "Ver trajeto ilustrativo", true, () -> { store.setText("map_shelter", s.id); store.setFlag("map_route", true); navigate(MapaRiscoActivity.class); });
+        button(body, "Compartilhar este exemplo", false, () -> share("[Demonstração acadêmica — Abrigo Seguro] " + s.name + ". " + s.address + ". " + s.available() + " vagas fictícias. Não utilizar para deslocamento real."));
     }
 }

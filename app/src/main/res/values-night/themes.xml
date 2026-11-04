@@ -1,6 +1,13 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.AbrigoSeguro" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">#23D7FF</item>
+        <item name="colorOnPrimary">#06111F</item>
+        <item name="colorSecondary">#25D07B</item>
+        <item name="colorSurface">#0E2035</item>
+        <item name="colorOnSurface">#F5FAFF</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:fontFamily">sans</item>
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
     </style>
