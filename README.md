@@ -6,7 +6,7 @@ Aplicativo Android acadêmico para demonstrar consulta de abrigos, alertas, prep
 
 ## Abrir no Android Studio
 
-1. Baixe/clon​e a branch de entrega indicada no pull request ou extraia o ZIP do projeto.
+1. Baixe/clone a branch `main` ou extraia o ZIP do projeto.
 2. No Android Studio compatível com AGP 9.3, escolha **Open** e selecione a pasta que contém `settings.gradle.kts`.
 3. Instale **Android SDK Platform 37.0**, **Build Tools 36.0.0** e **Platform Tools** pelo SDK Manager. O nome do pacote é `platforms;android-37.0`, não `android-37`.
 4. Use **JDK 25** em Settings → Build, Execution, Deployment → Build Tools → Gradle. O projeto mantém a configuração de toolchain 25 do original, com resolução pelo Foojay.
