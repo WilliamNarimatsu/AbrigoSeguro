@@ -24,14 +24,15 @@ public final class RouteView extends View {
         super.onDraw(canvas);
         float density = getResources().getDisplayMetrics().density, w = getWidth(), h = getHeight();
         float sx = w * .5f, sy = h * .55f, ex = w * destination.x, ey = h * destination.y;
-        paint.setColor(0xff244764); paint.setStrokeWidth(density);
+        boolean dark = ((BaseActivity)getContext()).isDarkMode();
+        paint.setColor(dark ? 0xff244764 : 0xffd3dfeb); paint.setStrokeWidth(density);
         for (int i = 1; i < 6; i++) canvas.drawLine(0, h * i / 6, w, h * i / 6 - 20 * density, paint);
         route.reset(); route.moveTo(sx, sy); route.lineTo(sx, ey); route.lineTo(ex, ey);
-        paint.setColor(0xff23d7ff); paint.setStrokeWidth(3 * density); paint.setStyle(Paint.Style.STROKE);
+        paint.setColor(dark ? 0xff23d7ff : 0xff09659b); paint.setStrokeWidth(3 * density); paint.setStyle(Paint.Style.STROKE);
         paint.setPathEffect(dash); canvas.drawPath(route, paint);
         paint.setPathEffect(null); paint.setStyle(Paint.Style.FILL); paint.setColor(0xff1e88ff);
         canvas.drawCircle(sx, sy, 7 * density, paint); paint.setColor(0xff25d07b); canvas.drawCircle(ex, ey, 8 * density, paint);
-        paint.setColor(0xfff5faff); paint.setTextSize(12 * density); paint.setTextAlign(Paint.Align.CENTER);
+        paint.setColor(dark ? 0xfff5faff : 0xff172b43); paint.setTextSize(12 * density); paint.setTextAlign(Paint.Align.CENTER);
         canvas.drawText("Origem fictícia", sx, sy + 23 * density, paint);
         canvas.drawText("Destino", ex, ey > h * .6f ? ey - 17 * density : ey + 23 * density, paint);
     }

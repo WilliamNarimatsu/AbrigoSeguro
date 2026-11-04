@@ -52,7 +52,7 @@ public class ScreenFlowTest {
         for (Class<?> page : pages) {
             @SuppressWarnings("unchecked") Class<? extends Activity> activity = (Class<? extends Activity>)page;
             try (ActivityController<? extends Activity> c = open(activity)) {
-                view(c.get(), "PROJETO ACADÊMICO • DADOS SIMULADOS");
+                assertNotNull(c.get().getWindow().getDecorView().findViewWithTag("fixed_header"));
             }
         }
     }

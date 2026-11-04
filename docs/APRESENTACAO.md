@@ -32,3 +32,7 @@
 **Como evoluir para uso real?** Definir município e fonte oficial, contrato de atualização e expiração de alertas, cadastro autenticado de abrigos, disponibilidade, integração geográfica, validação de acessibilidade e operação do serviço. A interface já distingue funções locais de integrações futuras.
 
 **Onde ficam os dados?** Contatos/preferências em SharedPreferences privadas; catálogo offline em arquivo interno gravado atomicamente. Não há envio a servidor.
+
+## Atualização 1.2
+
+A barra inferior mantém Início, Mapa, Abrigos, SOS e Perfil, com transição de 180 ms e sem atraso artificial ao navegar. Em Perfil, demonstrar Claro/Escuro/Sistema, Reduzir movimentos e a foto original. O nome exibido acompanha a edição. Não há aviso acadêmico fixo em todas as telas; informações sobre os dados permanecem em contexto e em Sobre o aplicativo.

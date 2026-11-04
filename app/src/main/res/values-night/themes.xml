@@ -6,6 +6,7 @@
         <item name="colorSecondary">#25D07B</item>
         <item name="colorSurface">#0E2035</item>
         <item name="colorOnSurface">#F5FAFF</item>
+        <item name="android:windowBackground">#06111F</item>
         <item name="android:windowLightStatusBar">false</item>
         <item name="android:fontFamily">sans</item>
         <!-- Customize your dark theme here. -->

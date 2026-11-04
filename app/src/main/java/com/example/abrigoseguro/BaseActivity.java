@@ -9,6 +9,10 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.os.Build;
+import android.animation.ValueAnimator;
+import android.provider.Settings;
+import android.view.animation.PathInterpolator;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -26,6 +30,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.core.graphics.Insets;
+import androidx.core.graphics.ColorUtils;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -36,7 +41,7 @@ import java.util.function.Consumer;
 public abstract class BaseActivity extends AppCompatActivity {
     protected AppStore store;
     protected LinearLayout body;
-    protected static final int BG = 0xff06111f, PANEL = 0xff0e2035, TEXT = 0xfff5faff,
+    protected int BG = 0xff06111f, PANEL = 0xff0e2035, TEXT = 0xfff5faff,
             MUTED = 0xffa5bad0, GREEN = 0xff25d07b, CYAN = 0xff23d7ff, RED = 0xffff8f9a,
             BLUE = 0xff126adb, AMBER = 0xffffb020;
     private boolean large, contrast;
@@ -44,16 +49,30 @@ public abstract class BaseActivity extends AppCompatActivity {
     private int resumeScroll, resumeSelection;
     private String resumeField;
     private long pausedRevision;
+    private String appearance;
+    private boolean darkMode, navigating, navigationEntryPending;
+    private BottomBar bottomBar;
     @Override protected void attachBaseContext(Context base) {
         Configuration config = new Configuration(base.getResources().getConfiguration());
         if (new AppStore(base).flag("large_text")) config.fontScale *= 1.2f;
         super.attachBaseContext(base.createConfigurationContext(config));
     }
     @Override protected void onCreate(Bundle state) {
-        getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        store = new AppStore(this);
+        appearance = store.text("theme");
+        getDelegate().setLocalNightMode("light".equals(appearance) ? AppCompatDelegate.MODE_NIGHT_NO
+            : "dark".equals(appearance) ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
         super.onCreate(state);
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
-        store = new AppStore(this);
+        darkMode = "dark".equals(appearance) || (!"light".equals(appearance)
+            && (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES);
+        if (!darkMode) {
+            BG = 0xfff3f6fb; PANEL = Color.WHITE; TEXT = 0xff172b43; MUTED = 0xff50637a;
+            GREEN = 0xff087849; CYAN = 0xff09659b; RED = 0xffb4233b; AMBER = 0xff895800;
+        }
+        WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView()).setAppearanceLightStatusBars(!darkMode);
+        WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView()).setAppearanceLightNavigationBars(!darkMode);
+        navigationEntryPending = state == null && getIntent().hasExtra("nav_from");
         large = store.flag("large_text"); contrast = store.flag("contrast");
         if (state != null) {
             resumeScroll = state.getInt("page_scroll"); resumeField = state.getString("focused_field");
@@ -62,10 +81,11 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
     @Override protected void onResume() {
         super.onResume();
-        if (large != store.flag("large_text") || contrast != store.flag("contrast")) { recreate(); return; }
+        navigating = false;
+        if (large != store.flag("large_text") || contrast != store.flag("contrast") || !appearance.equals(store.text("theme"))) { recreate(); return; }
         // External activities do not change our data: retain the actual view tree,
         // scroll position, keyboard and TalkBack focus instead of rebuilding it.
-        if (body != null && pausedRevision == store.revision()) return;
+        if (body != null && pausedRevision == store.revision()) { animateNavigationEntry(); return; }
         render();
         if (pageScroll != null) {
             if (resumeField != null && body != null) {
@@ -76,6 +96,26 @@ public abstract class BaseActivity extends AppCompatActivity {
                 }
             }
             pageScroll.post(() -> pageScroll.scrollTo(0, resumeScroll));
+        }
+        animateNavigationEntry();
+    }
+    @Override protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent); setIntent(intent); navigationEntryPending = intent.hasExtra("nav_from");
+    }
+    public boolean isDarkMode() { return darkMode; }
+    protected boolean motionEnabled() {
+        if (store.flag("reduce_motion")) return false;
+        return Build.VERSION.SDK_INT >= 26 ? ValueAnimator.areAnimatorsEnabled()
+            : Settings.Global.getFloat(getContentResolver(), Settings.Global.ANIMATOR_DURATION_SCALE, 1f) != 0f;
+    }
+    private void animateNavigationEntry() {
+        if (!navigationEntryPending) return;
+        navigationEntryPending = false;
+        int from = getIntent().getIntExtra("nav_from", navigationIndex(getClass()));
+        if (bottomBar != null) bottomBar.animateFrom(from);
+        if (body != null && motionEnabled() && from != navigationIndex(getClass())) {
+            body.animate().cancel(); body.setAlpha(.65f); body.setTranslationX(dp(12) * (navigationIndex(getClass()) > from ? 1 : -1));
+            body.animate().alpha(1f).translationX(0).setDuration(BottomBar.SLIDE_MS).setInterpolator(new PathInterpolator(.2f, 0f, 0f, 1f)).start();
         }
     }
     private void rememberPosition() {
@@ -91,9 +131,9 @@ public abstract class BaseActivity extends AppCompatActivity {
         state.putInt("field_selection", resumeSelection); super.onSaveInstanceState(state);
     }
     protected abstract void render();
-    protected int background() { return store.flag("contrast") ? Color.BLACK : BG; }
-    protected int panel() { return store.flag("contrast") ? 0xff111111 : PANEL; }
-    protected int muted() { return store.flag("contrast") ? Color.WHITE : MUTED; }
+    protected int background() { return store.flag("contrast") ? (darkMode ? Color.BLACK : Color.WHITE) : BG; }
+    protected int panel() { return store.flag("contrast") ? (darkMode ? 0xff111111 : Color.WHITE) : PANEL; }
+    protected int muted() { return store.flag("contrast") ? (darkMode ? Color.WHITE : Color.BLACK) : MUTED; }
     protected int dp(float size) { return Math.round(size * getResources().getDisplayMetrics().density); }
     protected LinearLayout column() {
         LinearLayout result = new LinearLayout(this); result.setOrientation(LinearLayout.VERTICAL); return result;
@@ -104,54 +144,62 @@ public abstract class BaseActivity extends AppCompatActivity {
             Insets safe = insets.getInsets(WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout() | WindowInsetsCompat.Type.ime());
             view.setPadding(safe.left, safe.top, safe.right, safe.bottom); return insets;
         });
-        ScrollView scroll = new ScrollView(this); scroll.setFillViewport(true); pageScroll = scroll;
-        body = column(); body.setPadding(dp(24), dp(12), dp(24), dp(24));
-        scroll.addView(body); root.addView(scroll, new LinearLayout.LayoutParams(-1, 0, 1));
         if (!title.isEmpty()) {
-            LinearLayout header = new LinearLayout(this); header.setGravity(Gravity.CENTER_VERTICAL);
+            LinearLayout header = new LinearLayout(this); header.setGravity(Gravity.CENTER_VERTICAL); header.setPadding(dp(16), dp(8), dp(16), dp(8));
+            header.setMinimumHeight(dp(64)); header.setTag("fixed_header");
             if (!(this instanceof HomeActivity) && !(this instanceof MainActivity) && !(this instanceof OnbordingActivity)) {
-                TextView back = new TextView(this); back.setText("‹"); back.setTextSize(32); back.setTextColor(TEXT);
-                back.setGravity(Gravity.CENTER); back.setContentDescription("Voltar"); back.setFocusable(true);
+                ImageView back = new ImageView(this); back.setImageResource(R.drawable.ic_back); back.setImageTintList(ColorStateList.valueOf(TEXT));
+                back.setPadding(dp(12),dp(12),dp(12),dp(12)); back.setContentDescription("Voltar"); back.setFocusable(true);
                 back.setOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
                 header.addView(back, new LinearLayout.LayoutParams(dp(48), dp(48)));
             }
             TextView heading = new TextView(this); heading.setText(title); heading.setTextSize(20);
             heading.setTextColor(this instanceof HomeActivity ? GREEN : TEXT); heading.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
-            ViewCompat.setAccessibilityHeading(heading, true); header.addView(heading, new LinearLayout.LayoutParams(0, -2, 1)); body.addView(header);
+            ViewCompat.setAccessibilityHeading(heading, true); header.addView(heading, new LinearLayout.LayoutParams(0, -2, 1));
+            if (navigation && !(this instanceof PerfilAcessibilidadeActivity)) {
+                ImageView avatar = profilePhoto(48); avatar.setContentDescription("Abrir meu perfil"); avatar.setFocusable(true);
+                avatar.setOnClickListener(v -> navigate(PerfilAcessibilidadeActivity.class)); header.addView(avatar);
+            }
+            root.addView(header);
         }
-        label(body, "PROJETO ACADÊMICO • DADOS SIMULADOS", 11, CYAN, true);
+        ScrollView scroll = new ScrollView(this); scroll.setFillViewport(true); pageScroll = scroll; scroll.setClipToPadding(false);
+        body = column(); body.setPadding(dp(20), dp(4), dp(20), dp(24));
+        scroll.addView(body); root.addView(scroll, new LinearLayout.LayoutParams(-1, 0, 1));
         if (!subtitle.isEmpty()) label(body, subtitle, 14, muted(), false);
         if (navigation) addNavigation(root);
         setContentView(root); ViewCompat.requestApplyInsets(root);
     }
     private void addNavigation(LinearLayout root) {
-        HorizontalScrollView scroll = new HorizontalScrollView(this); scroll.setHorizontalScrollBarEnabled(false);
-        scroll.setFillViewport(true); scroll.setBackgroundColor(panel());
-        LinearLayout row = new LinearLayout(this); row.setPadding(dp(6), 0, dp(6), 0);
-        String[] labels = {"Início", "Mapa", "Abrigos", "SOS", "Mais"};
-        String[] icons = {"⌂", "◇", "▣", "!", "•••"};
         Class<?>[] pages = {HomeActivity.class, MapaRiscoActivity.class, AbrigosProximosActivity.class, ModoEmergenciaActivity.class, PerfilAcessibilidadeActivity.class};
-        for (int i = 0; i < labels.length; i++) {
-            Class<?> page = pages[i]; MaterialButton item = new MaterialButton(this);
-            item.setText(icons[i] + "\n" + labels[i]); item.setTextSize(12); item.setAllCaps(false);
-            item.setMinWidth(dp(64)); item.setMinimumWidth(dp(64)); item.setMinHeight(dp(52));
-            item.setPadding(dp(8), dp(4), dp(8), dp(4)); item.setInsetTop(dp(4)); item.setInsetBottom(dp(4));
-            boolean selected = getClass().equals(page); item.setSelected(selected);
-            item.setContentDescription(labels[i] + (selected ? ", aba atual" : ""));
-            item.setTextColor(selected ? CYAN : muted()); item.setBackgroundTintList(ColorStateList.valueOf(selected ? 0xff123d68 : panel()));
-            item.setOnClickListener(v -> { if (!selected) navigate(page); });
-            row.addView(item, new LinearLayout.LayoutParams(0, -2, 1));
-        }
-        scroll.addView(row, new HorizontalScrollView.LayoutParams(-1, -2)); root.addView(scroll);
+        bottomBar = new BottomBar(this, navigationIndex(getClass()), index -> navigate(pages[index]));
+        LinearLayout.LayoutParams layout = new LinearLayout.LayoutParams(-1, -2);
+        layout.setMargins(dp(14), dp(8), dp(14), dp(10)); root.addView(bottomBar, layout);
+    }
+    static int navigationIndex(Class<?> page) {
+        if (page == HomeActivity.class || page == AtencaoActivity.class || page == AlertaActivity.class) return 0;
+        if (page == MapaRiscoActivity.class) return 1;
+        if (page == AbrigosProximosActivity.class || page == DetalhesAbrigoActivity.class) return 2;
+        if (page == ModoEmergenciaActivity.class) return 3;
+        return 4;
     }
     protected void navigate(Class<?> page) {
-        startActivity(new Intent(this, page).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP));
+        if (getClass() == page || navigating) return;
+        navigating = true;
+        startActivity(new Intent(this, page).putExtra("nav_from", navigationIndex(getClass()))
+            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NO_ANIMATION));
     }
+    protected ImageView profilePhoto(int size) {
+        ImageView photo = new ImageView(this); photo.setImageResource(R.drawable.toga); photo.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        GradientDrawable outline = new GradientDrawable(); outline.setShape(GradientDrawable.OVAL); outline.setColor(panel()); photo.setBackground(outline);
+        photo.setClipToOutline(true); photo.setContentDescription("Foto de perfil de " + profileName());
+        photo.setLayoutParams(new LinearLayout.LayoutParams(dp(size), dp(size))); return photo;
+    }
+    protected String profileName() { return store.text("profile_name").trim().isEmpty() ? "Diogo" : store.text("profile_name").trim(); }
     protected void shelter(String id) { startActivity(new Intent(this, DetalhesAbrigoActivity.class).putExtra("shelter_id", id)); }
     protected LinearLayout card(String title, String description) {
         LinearLayout box = column(); box.setPadding(dp(18), dp(16), dp(18), dp(16));
         GradientDrawable bg = new GradientDrawable(); bg.setColor(panel()); bg.setCornerRadius(dp(18));
-        bg.setStroke(dp(1), store.flag("contrast") ? Color.WHITE : 0xff29425b); box.setBackground(bg);
+        bg.setStroke(dp(1), store.flag("contrast") ? TEXT : (darkMode ? 0xff29425b : 0xffdbe4ef)); box.setBackground(bg);
         LinearLayout.LayoutParams layout = new LinearLayout.LayoutParams(-1, -2); layout.topMargin = dp(14);
         body.addView(box, layout);
         if (!title.isEmpty()) { TextView text = label(box, title, 17, TEXT, true); ViewCompat.setAccessibilityHeading(text, true); }
@@ -159,8 +207,8 @@ public abstract class BaseActivity extends AppCompatActivity {
         return box;
     }
     protected void tintCard(LinearLayout box, int fill, int border) {
-        GradientDrawable bg = new GradientDrawable(); bg.setColor(store.flag("contrast") ? Color.BLACK : fill);
-        bg.setCornerRadius(dp(20)); bg.setStroke(dp(1), store.flag("contrast") ? Color.WHITE : border); box.setBackground(bg);
+        GradientDrawable bg = new GradientDrawable(); bg.setColor(store.flag("contrast") ? background() : (darkMode ? fill : ColorUtils.blendARGB(fill,Color.WHITE,.92f)));
+        bg.setCornerRadius(dp(20)); bg.setStroke(dp(1), store.flag("contrast") ? TEXT : border); box.setBackground(bg);
     }
     protected void illustration(LinearLayout parent, int resource, String description, int height) {
         ImageView image = new ImageView(this); image.setImageResource(resource);
@@ -178,7 +226,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         button.setTextSize(15); button.setMinHeight(dp(52)); button.setCornerRadius(dp(12));
         button.setTextColor(primary ? Color.WHITE : CYAN);
         button.setBackgroundTintList(ColorStateList.valueOf(primary ? BLUE : panel()));
-        button.setStrokeColor(ColorStateList.valueOf(primary ? BLUE : 0xff46647f)); button.setStrokeWidth(dp(1));
+        button.setStrokeColor(ColorStateList.valueOf(primary ? BLUE : (darkMode ? 0xff46647f : 0xffd0dce9))); button.setStrokeWidth(dp(1));
         button.setPadding(dp(14), dp(10), dp(14), dp(10)); button.setOnClickListener(v -> action.run());
         parent.addView(button, new LinearLayout.LayoutParams(-1, -2)); return button;
     }

@@ -42,7 +42,8 @@ Em **Actions → Android — build, tests and APK**, abra uma execução conclu�
 - Rede de apoio: criar/editar/excluir contatos, validação e bloqueio de telefone duplicado, rascunho persistente, discador e composição de SMS.
 - SOS: mensagem de teste com referência opcional, revisão explícita e compartilhamento pelo Android. Nenhum envio automático.
 - Offline: pacote JSON com catálogo e alertas, gravação atômica, data/tamanho, leitura do pacote e remoção sem apagar contatos. Pacote inválido volta ao catálogo embarcado.
-- Perfil local, fonte ampliada, alto contraste, integração com ajustes de acessibilidade do Android e exclusão dos dados locais.
+- Barra inferior com cinco destinos, indicador deslizante de 180 ms e proteção contra toques repetidos.
+- Perfil com foto original, nome editável, temas claro/escuro/sistema, redução de movimentos, fonte ampliada e alto contraste.
 
 ## Design e adaptações
 
@@ -60,7 +61,7 @@ As ilustrações já presentes no repositório e correspondentes ao Figma são r
 
 ## Privacidade e limites
 
-Sem permissão de localização, agenda, SMS, chamadas diretas ou internet. O usuário pode apagar dados em **Mais → Apagar meus dados locais**. Backup/transferência automática dos dados do app estão desativados. Apps externos escolhidos pelo usuário têm suas próprias regras de privacidade.
+Sem permissão de localização, agenda, SMS, chamadas diretas ou internet. O usuário pode apagar dados em **Perfil → Apagar meus dados locais**. Backup/transferência automática dos dados do app estão desativados. Apps externos escolhidos pelo usuário têm suas próprias regras de privacidade.
 
 O mapa não é geográfico; não use para deslocamentos reais. Não existem notificações push, status de familiares em tempo real, GPS ou integração oficial. Leitura de tela é feita pelo recurso de acessibilidade do Android, configurável na tela de perfil. Publicação de produção exigiria fontes oficiais, backend, análise de privacidade e validação em dispositivos.
 
