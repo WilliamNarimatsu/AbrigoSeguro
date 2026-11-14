@@ -1,0 +1,41 @@
+﻿NARRAÇÃO — ABRIGO SEGURO
+Voz sintética: português brasileiro.
+
+00:00:00,000 — ABRIGO SEGURO
+Imagine precisar de um abrigo e não saber por onde começar. Onde buscar informação? Quem avisar? O Abrigo Seguro nasceu dessa ideia: reunir orientação, preparação e uma rede de apoio em uma experiência simples. Vamos conhecer como isso funciona, direto no celular.
+
+00:00:21,400 — 01 / VISÃO GERAL
+Logo na entrada, a proposta fica clara. Os atalhos levam aos abrigos, ao mapa, à rede de apoio e ao guia offline. E a barra inferior mantém as áreas principais sempre à mão. Assim, fica mais fácil encontrar o próximo passo.
+
+00:00:39,467 — 02 / CATÁLOGO DE ABRIGOS
+Na busca por abrigo, não basta mostrar uma lista. É preciso ajudar na escolha. Por isso, o catálogo reúne vagas, acessibilidade e aceitação de animais. Também permite buscar por nome ou bairro, combinar filtros e consultar os favoritos, sem espalhar essas informações por várias telas.
+
+00:01:01,233 — 03 / DETALHES DO ABRIGO
+Ao abrir um abrigo, os detalhes aparecem juntos: capacidade, ocupação e estrutura disponível. Dessa mesma tela, é possível salvar um favorito e abrir o trajeto ilustrativo. A ideia é dar continuidade à consulta, sem obrigar a pessoa a começar de novo.
+
+00:01:20,467 — 04 / MAPA E DESTINO
+No mapa, a consulta continua. Você pode trocar o abrigo selecionado e visualizar um trajeto para aquele destino. Nesta versão, o desenho é ilustrativo, sem GPS ou monitoramento ao vivo. Ele demonstra como a navegação conecta a escolha do abrigo à visualização do caminho.
+
+00:01:40,967 — 05 / CENTRAL DE ALERTAS
+Os alertas também têm um papel importante: organizar a atenção. A central separa os avisos por gravidade e permite acompanhar o que já foi lido. Ao abrir um aviso, a pessoa encontra orientações e acessos ao mapa, ao checklist e à rede de apoio. A informação vira um próximo passo.
+
+00:02:01,533 — 06 / CHECKLIST
+E antes de precisar agir, dá para se preparar. O checklist reúne documentos, água, medicamentos, bateria e contatos. Conforme os itens são marcados, o progresso muda na hora. É uma maneira simples de transformar uma lista de preocupações em pequenas tarefas que podem ser acompanhadas.
+
+00:02:22,600 — 07 / CONTATOS DE CONFIANÇA
+A rede de apoio coloca as pessoas de confiança no centro da experiência. O aplicativo permite cadastrar e editar contatos, além de preparar o compartilhamento de uma mensagem de que você está seguro. E quem decide o destinatário e confirma o envio é sempre o usuário.
+
+00:02:40,900 — 08 / ACESSO OFFLINE
+Outro diferencial é o acesso offline. O catálogo básico já acompanha o aplicativo, e existe a opção de salvar um pacote local com abrigos e alertas. Checklist e contatos também permanecem no aparelho. Assim, consultar essas informações não depende de uma conexão a cada abertura.
+
+00:03:01,800 — 09 / FLUXO SOS
+No fluxo de SOS, o cuidado está nos detalhes. A pessoa pode informar um ponto de referência e revisar a mensagem antes de compartilhar. Os atalhos de telefone também pedem confirmação antes de abrir o discador. Nada é enviado automaticamente, e o aplicativo não aciona um serviço de resgate.
+
+00:03:23,567 — 10 / APARÊNCIA E ACESSIBILIDADE
+A experiência também precisa funcionar para diferentes pessoas. No perfil, estão os temas claro, escuro e do sistema. Há opções para ampliar o texto, aumentar o contraste e reduzir os movimentos. São escolhas que tornam a interface mais confortável e dão ao usuário controle sobre a forma de navegar.
+
+00:03:45,467 — 11 / PRIVACIDADE
+Esse controle também vale para os dados. Contatos e preferências ficam no próprio dispositivo. O aplicativo não coleta localização nem envia essas informações a um servidor. E o perfil reúne as opções para gerenciar o conteúdo local e apagar os dados quando a pessoa quiser.
+
+00:04:05,400 — ABRIGO SEGURO
+O resultado é um aplicativo Android funcional, testado e validado no celular. Os dados desta apresentação são demonstrativos, mas os fluxos já podem ser explorados de ponta a ponta. Esse é o Abrigo Seguro: uma proposta para tornar a informação mais clara, a preparação mais simples e o apoio mais próximo.

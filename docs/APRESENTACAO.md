@@ -1,6 +1,8 @@
 # Apresentação em 5–8 minutos
 
-1. Abra o app e explique a identificação de demonstração. Comece e feche/reabra: o onboarding não deve reaparecer.
+[Voltar ao projeto](../README.md) · [Guia do professor](GUIA_PROFESSOR.md) · [Roteiro do vídeo](ROTEIRO_VIDEO.txt)
+
+1. Abra o app e contextualize a proposta e os dados demonstrativos. Comece e feche/reabra: o onboarding não deve reaparecer.
 2. No início, mostre os atalhos e troque entre região segura, atenção e crítico. Explique que quem apresenta escolhe o cenário.
 3. Abra Abrigos, busque `ginasio` sem acento, limpe e combine filtros. Com nenhum favorito, o filtro Favoritos deve mostrar um estado vazio útil.
 4. Abra Vila Norte, salve como favorito, confira ocupação e serviços, abra o trajeto. Troque o destino no mapa e mostre a mudança do diagrama ao ativar o trajeto.
@@ -12,6 +14,8 @@
 10. Termine explicando os limites: nenhum dado oficial, GPS, serviço de resgate ou reserva de vaga.
 
 ## Checklist manual no aparelho/emulador
+
+A equipe já confirmou a execução no celular. Os itens abaixo continuam como roteiro de avaliação detalhada: não foram marcados automaticamente apenas com base nessa confirmação geral.
 
 - [ ] Instalação limpa, abertura, onboarding e retorno ao app.
 - [ ] Todas as cinco abas e botão Voltar sem loops ou telas duplicadas indefinidamente.

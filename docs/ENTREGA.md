@@ -1,13 +1,31 @@
-# Abrigo Seguro 1.1 — demonstração acadêmica
+# Entrega — Abrigo Seguro 1.2.1
 
-Versão funcional do protótipo, baseada nas 12 telas do Figma da equipe e adaptada para uso acadêmico.
+[Voltar ao projeto](../README.md) · [Guia do professor](GUIA_PROFESSOR.md)
 
-Inclui busca/filtros/favoritos de abrigos, seleção de trajeto ilustrativo, alertas com leitura persistente, checklist, contatos editáveis, compartilhamento com revisão, perfil/acessibilidade e pacote offline.
+**Aplicativo funcional, executado no celular pela equipe, com código, APK, apresentação narrada e documentação disponíveis.**
 
-**Validação:** APK compilado, 21 testes aprovados e lint sem erros (76 avisos documentados). Testes executados por linha de comando, sem Android Studio. A conferência visual final em aparelho/emulador está descrita em `docs/APRESENTACAO.md`.
+| Material | Acesso |
+| --- | --- |
+| Aplicativo Android | [Baixar APK 1.2.1](https://github.com/WilliamNarimatsu/AbrigoSeguro/releases/download/v1.2.1-demo/AbrigoSeguro-1.2.1-demo.apk) |
+| Apresentação para projetor/computador | [MP4 Full HD — 4min27](https://github.com/WilliamNarimatsu/AbrigoSeguro/releases/download/v1.2.1-demo/AbrigoSeguro-apresentacao-FullHD.mp4) |
+| Apresentação para celular | [MP4 vertical](https://github.com/WilliamNarimatsu/AbrigoSeguro/releases/download/v1.2.1-demo/AbrigoSeguro-apresentacao-vertical.mp4) |
+| Legendas | [SRT em português](https://github.com/WilliamNarimatsu/AbrigoSeguro/releases/download/v1.2.1-demo/AbrigoSeguro-legendas.srt) |
+| Roteiro | [Texto da narração](ROTEIRO_VIDEO.txt) |
+| Código com documentação atual | [Branch main](https://github.com/WilliamNarimatsu/AbrigoSeguro/tree/main) · [ZIP atual](https://github.com/WilliamNarimatsu/AbrigoSeguro/archive/refs/heads/main.zip) |
+| Pacote original da versão do app | [Release v1.2.1-demo](https://github.com/WilliamNarimatsu/AbrigoSeguro/releases/tag/v1.2.1-demo) |
 
-Baixe o APK anexado para instalar em um aparelho de teste Android 7.0 ou superior. É uma versão debug. Se houver outra instalação assinada com chave diferente, o Android pode exigir desinstalar a anterior (o que apaga seus dados locais).
+## O que está incluído
 
-Para abrir o código no Android Studio, siga o README. Não precisa configurar servidor, conta ou chave de API.
+Busca e filtros de abrigos, favoritos, detalhes, mapa com destino selecionado, alertas com leitura persistente, checklist, contatos editáveis, SOS com revisão, pacote offline e perfil com temas e acessibilidade. O ícone é próprio, com versões adaptativa e monocromática.
 
-**Importante para a apresentação:** os dados e trajetos são fictícios. Não complete chamadas para os números reais de emergência durante testes.
+## Verificação da versão
+
+APK compilado, **36 testes automatizados aprovados**, lint com **0 erros e 76 avisos** e [execução do GitHub Actions aprovada](https://github.com/WilliamNarimatsu/AbrigoSeguro/actions/runs/41937288477). A equipe confirmou o funcionamento no celular e forneceu a gravação usada na apresentação. Veja o [registro de verificação](VERIFICACAO.md).
+
+Os vídeos foram preparados em 1920 × 1080 e 1080 × 1920, com narração sintética em português brasileiro, legendas incorporadas e cortes da gravação real. Não representam telas ou funções adicionais ao aplicativo.
+
+## Como usar a entrega
+
+Para avaliar, comece pelo vídeo e pelo [guia do professor](GUIA_PROFESSOR.md). Para instalar ou abrir o código no Android Studio, siga o [guia de execução](EXECUCAO.md). Não é necessário configurar servidor, conta nem chave de API.
+
+Os dados e trajetos são demonstrativos. O app não monitora riscos, não reserva vagas nem aciona resgate. Não conclua chamadas reais durante testes.

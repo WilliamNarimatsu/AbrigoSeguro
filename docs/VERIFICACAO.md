@@ -1,4 +1,8 @@
-# Verificação da entrega — 04/11/2026
+# Verificação da entrega
+
+[Voltar ao projeto](../README.md) · [Guia do professor](GUIA_PROFESSOR.md)
+
+Build e testes da versão 1.2.1: 04/11/2026. Materiais e registro de execução no celular atualizados em 14/11/2026.
 
 ## Executado
 
@@ -22,7 +26,7 @@ Busca sem acentos; filtros combinados; favoritos vazios; identificador inválido
 
 ## Limites da verificação
 
-Não foi realizada execução visual em emulador ou aparelho físico nesta máquina. Robolectric não substitui essa validação. O roteiro em `APRESENTACAO.md` deve ser concluído no aparelho/emulador do colega, especialmente TalkBack, fonte do sistema muito grande, paisagem, teclado e apps externos. Foram geradas e inspecionadas renderizações Robolectric Native Graphics de início e perfil nos dois temas e perfil com fonte ampliada (390 dp). Os alvos da barra inferior são verificados com mínimo de 48 dp. O recorte por outline e as animações precisam de validação final em hardware; não foi feita comparação pixel a pixel com Figma.
+A equipe confirmou que o aplicativo foi instalado e rodou bem no celular. A gravação fornecida mostra a navegação real e foi usada na apresentação da entrega. Essa confirmação não significa que cada item do checklist manual foi testado: TalkBack, fonte do sistema muito grande, paisagem e diferentes apps externos ainda pedem verificação específica. Não houve execução em aparelho físico nesta máquina de desenvolvimento; os testes locais usaram Robolectric. Foram geradas e inspecionadas renderizações Robolectric Native Graphics de início e perfil nos dois temas e perfil com fonte ampliada (390 dp). Os alvos da barra inferior são verificados com mínimo de 48 dp. A gravação mostra a foto com recorte e a navegação em hardware. Não foi feita comparação pixel a pixel com Figma nem auditoria completa de acessibilidade.
 
 Os dados são demonstrativos. O sucesso dos testes não significa adequação a emergências reais ou prontidão para publicação comercial.
 
